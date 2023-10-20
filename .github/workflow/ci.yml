@@ -2,14 +2,15 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
 
 jobs:
   build:
-
-    runs-on: debian
+    runs-on: [self-hosted]
 
     steps:
       - name: Test
-        run: echo "test"
+        run: echo "test message"
