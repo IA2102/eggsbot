@@ -15,7 +15,7 @@ async def eggs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if re.match(EGGS_PATTERN, user_message) is not None:
         file_list = glob.glob(STATIC_DIR + '/*')
         is_moshonka = random.randint(1, 100) <= 5
-        egg_number = 0 if is_moshonka else len(file_list)
+        egg_number = 0 if is_moshonka else random.randint(1, len(file_list) - 2)
 
         await context.bot.send_photo(update.effective_chat.id, photo=open(f'{STATIC_DIR}/eggs_{egg_number}.jpg', 'rb'))
 
