@@ -1,19 +1,14 @@
 import glob
 import random
 import re
-import time
-from collections import defaultdict, deque
 
 from telegram import Update
-from telegram.ext import MessageHandler, ContextTypes, filters, CommandHandler
+from telegram.ext import MessageHandler, ContextTypes, filters
 
 from settings import STATIC_DIR
 from utils.logger import STDOUT_LOGGER as logger
 
 EGGS_PATTERN = ".*([яЯ][иИЙй][ЧчЦц]).*"
-user_ids = ('DanilaY13', 'vitalicaraivanov', 'Diacon_Anastasia', 'toadski', 'npowell931', 'tdktxjrxhrx', 'bigboug',
-            'ericad02', 'BA_RS_01', 'memejunky', 'beautifulmorning', 'eriomenco_nik')
-user_dict = defaultdict(lambda: deque(maxlen=11))
 
 
 async def eggs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -27,39 +22,4 @@ async def eggs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await context.bot.send_photo(update.effective_chat.id, photo=open(f'{STATIC_DIR}/eggs_{egg_number}.jpg', 'rb'))
 
 
-async def find_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    chat_id = update.effective_chat.id
-    user_id = update.effective_user.id
-    username = update.effective_user.username
-    current_time = time.time()
-    logger.info("user_id = %d, username = %s", user_id, username)
-
-    if len(user_dict[username]) >= 9 and user_dict[username][0] >= current_time - 20:
-        user_dict[username].clear()
-        await context.bot.send_message(
-            chat_id=chat_id,
-            text=f'@{username}, ты наказан за флуд. Подумай над своим поведением! (10 сек)'
-        )
-        await context.bot.ban_chat_member(chat_id, user_id)
-        time.sleep(10)
-        await context.bot.unban_chat_member(chat_id, user_id)
-    else:
-        while user_dict[username]:
-            if user_dict[username][0] <= current_time - 20:
-                user_dict[username].popleft()
-            else:
-                break
-        user_dict[username].append(time.time())
-
-
-async def call_all(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    mention_all = " ".join([f"@{user_id}" for user_id in user_ids])
-
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=mention_all)
-
-
 EGGS_HANDLER = MessageHandler(filters.TEXT, eggs)
-FIND_FLOOD_HANDLER = MessageHandler(filters.CHAT, find_flood)
-CALL_ALL_HANDLER = CommandHandler("callall", call_all, filters.COMMAND)
-
-
