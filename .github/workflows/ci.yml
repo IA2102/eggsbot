@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: debian
+    runs-on: [self-hosted]
     if: github.ref == 'refs/heads/master'
     steps:
       - name: Deploying
