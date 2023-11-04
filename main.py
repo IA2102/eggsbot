@@ -1,7 +1,5 @@
 from telegram.ext import ApplicationBuilder
 
-from handlers.eggs import CALL_ALL_HANDLER
-from settings import TELEGRAM_TOKEN
 from handlers import *
 
 app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
