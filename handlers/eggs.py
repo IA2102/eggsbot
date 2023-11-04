@@ -4,8 +4,6 @@ import random
 import time
 from collections import defaultdict, deque
 
-from telegram.constants import ChatAction
-
 from utils.logger import STDOUT_LOGGER as logger
 from settings import STATIC_DIR
 from telegram import Update
@@ -28,37 +26,6 @@ async def eggs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await context.bot.send_photo(update.effective_chat.id, photo=open(f'{STATIC_DIR}/eggs_{egg_number}.jpg', 'rb'))
 
 
-# async def find_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-#     logger.info("Заходим в find_flood")
-#     user_id = update.effective_user.id
-#     username = update.effective_user.username
-#     current_time = time.time()
-#
-#     if len(user_dict[username]) >= 0 and len(user_dict[username]) >= 9 and user_dict[username][0] >= current_time - 20:
-#         user_dict[username].clear()
-#         await context.bot.send_message(
-#             chat_id=update.effective_chat.id,
-#             text=f'@{username}, ты наказан за флуд. Подумай над своим поведением! (10 сек)'
-#         )
-#         await context.bot.restrict_chat_member(
-#             update.effective_chat.id,
-#             user_id,
-#             telegram.ChatPermissions(can_send_messages=False)
-#         )
-#         time.sleep(10)
-#         await context.bot.restrict_chat_member(
-#             update.effective_chat.id,
-#             user_id,
-#             telegram.ChatPermissions(can_send_messages=True)
-#         )
-#     else:
-#         while user_dict[username]:
-#             if user_dict[username][0] <= current_time - 20:
-#                 user_dict[username].popleft()
-#             else:
-#                 break
-#         user_dict[username].append(time.time())
-
 async def find_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
     user_id = update.effective_user.id
@@ -66,19 +33,13 @@ async def find_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     current_time = time.time()
     logger.info("user_id = %d, username = %s", user_id, username)
 
-    if len(user_dict[username]) >= 0 and len(user_dict[username]) >= 9 and user_dict[username][0] >= current_time - 20:
+    if len(user_dict[username]) >= 9 and user_dict[username][0] >= current_time - 20:
         user_dict[username].clear()
-        await context.bot.send_message(
-            chat_id=chat_id,
-            text=f'@{username}, ты наказан за флуд. Подумай над своим поведением! (10 сек)'
+        await context.bot.send_photo(
+            chat_id,
+            photo=open(f'{STATIC_DIR}/eggs_cow.jpg', 'rb'),
+            caption=f'@{username} сосёт бычьи яйца, потому что flood'
         )
-        await context.bot.ban_chat_member(chat_id, user_id)
-        time.sleep(10)
-        await context.bot.unban_chat_member(chat_id, user_id)
-        telegram_link = await context.bot.create_chat_invite_link(
-            chat_id, time.time() + 3600, name="Ты прощён. Возвращайся!"
-        )
-        await context.bot.send_message(user_id, telegram_link.invite_link)
     else:
         while user_dict[username]:
             if user_dict[username][0] <= current_time - 20:
