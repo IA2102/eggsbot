@@ -1,9 +1,12 @@
 import re
 import random
-from utils.logger import STDOUT_LOGGER as logger
-from settings import STATIC_DIR
+
 from telegram import Update
 from telegram.ext import MessageHandler, ContextTypes, filters
+
+from utils.logger import STDOUT_LOGGER as logger
+from settings import STATIC_DIR
+
 
 EGGS_PATTERN = ".*([яЯ][иИЙй][ЧчЦц]).*"
 

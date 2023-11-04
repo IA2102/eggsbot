@@ -1,11 +1,13 @@
 from telegram.ext import ApplicationBuilder
-from settings import TELEGRAM_TOKEN
+
+import settings
 from handlers import *
 
-app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
+app = ApplicationBuilder().token(settings.TELEGRAM_TOKEN).build()
 
-app.add_handlers([
+app.add_handler([
     EGGS_HANDLER,
 ])
+app.add_handler(VENT_HANDLER, group=1)
 
 app.run_polling()
