@@ -10,7 +10,6 @@ on:
 jobs:
   deploy:
     runs-on: [self-hosted]
-    if: github.ref == 'refs/heads/master'
     steps:
       - name: Deploying
         uses: appleboy/ssh-action@master
@@ -18,6 +17,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
             cd /var/www/eggsbot
