@@ -8,7 +8,7 @@ from settings import STATIC_DIR
 from utils.logger import STDOUT_LOGGER as logger
 
 
-VENT_PATTERN = ".*([дД][уУ][шШ][нН][иИоО][тТлЛ]).*"
+VENT_PATTERN = ".*([дД][уУ][шШ][нН][иИоО]).*"
 MENTION_PATTERN = r'@(\w+)'
 
 
