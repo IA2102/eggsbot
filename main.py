@@ -5,7 +5,7 @@ from handlers import *
 
 app = ApplicationBuilder().token(settings.TELEGRAM_TOKEN).build()
 
-app.add_handler([
+app.add_handlers([
     EGGS_HANDLER,
 ])
 app.add_handler(VENT_HANDLER, group=1)
