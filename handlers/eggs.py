@@ -4,6 +4,8 @@ import random
 import time
 from collections import defaultdict, deque
 
+from telegram.constants import ChatAction
+
 from utils.logger import STDOUT_LOGGER as logger
 from settings import STATIC_DIR
 from telegram import Update
@@ -58,6 +60,7 @@ async def eggs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 #         user_dict[username].append(time.time())
 
 async def find_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    chat_id = update.effective_chat.id
     user_id = update.effective_user.id
     username = update.effective_user.username
     current_time = time.time()
@@ -66,12 +69,16 @@ async def find_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     if len(user_dict[username]) >= 0 and len(user_dict[username]) >= 9 and user_dict[username][0] >= current_time - 20:
         user_dict[username].clear()
         await context.bot.send_message(
-            chat_id=update.effective_chat.id,
+            chat_id=chat_id,
             text=f'@{username}, ты наказан за флуд. Подумай над своим поведением! (10 сек)'
         )
-        await context.bot.ban_chat_member(update.effective_chat.id, user_id)
+        await context.bot.ban_chat_member(chat_id, user_id)
         time.sleep(10)
-        await context.bot.unban_chat_member(update.effective_chat.id, user_id)
+        await context.bot.unban_chat_member(chat_id, user_id)
+        telegram_link = await context.bot.create_chat_invite_link(
+            chat_id, time.time() + 3600, name="Ты прощён. Возвращайся!"
+        )
+        await context.bot.send_message(user_id, telegram_link.invite_link)
     else:
         while user_dict[username]:
             if user_dict[username][0] <= current_time - 20:
@@ -88,7 +95,7 @@ async def call_all(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 EGGS_HANDLER = MessageHandler(filters.TEXT, eggs)
-FIND_FLOOD_HANDLER = MessageHandler(filters.TEXT, find_flood)
+FIND_FLOOD_HANDLER = MessageHandler(filters.CHAT, find_flood)
 CALL_ALL_HANDLER = CommandHandler("callall", call_all, filters.COMMAND)
 
 
