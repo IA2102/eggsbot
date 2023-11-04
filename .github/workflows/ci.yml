@@ -8,9 +8,18 @@ on:
 
 
 jobs:
-  build:
+  deploy:
     runs-on: [self-hosted]
-
     steps:
-      - name: Test
-        run: echo "test message"
+      - name: Deploying
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /var/www/eggsbot
+            git pull
+            nohup python3 main.py

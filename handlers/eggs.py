@@ -5,8 +5,9 @@ import re
 from telegram import Update
 from telegram.ext import MessageHandler, ContextTypes, filters
 
-from settings import STATIC_DIR
 from utils.logger import STDOUT_LOGGER as logger
+from settings import STATIC_DIR
+
 
 EGGS_PATTERN = ".*([яЯ][иИЙй][ЧчЦц]).*"
 
