@@ -1,13 +1,14 @@
 import glob
-import re
 import random
+import re
 import time
 from collections import defaultdict, deque
 
-from utils.logger import STDOUT_LOGGER as logger
-from settings import STATIC_DIR
 from telegram import Update
 from telegram.ext import MessageHandler, ContextTypes, filters, CommandHandler
+
+from settings import STATIC_DIR
+from utils.logger import STDOUT_LOGGER as logger
 
 EGGS_PATTERN = ".*([яЯ][иИЙй][ЧчЦц]).*"
 user_ids = ('DanilaY13', 'vitalicaraivanov', 'Diacon_Anastasia', 'toadski', 'npowell931', 'tdktxjrxhrx', 'bigboug',
@@ -35,11 +36,13 @@ async def find_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
 
     if len(user_dict[username]) >= 9 and user_dict[username][0] >= current_time - 20:
         user_dict[username].clear()
-        await context.bot.send_photo(
-            chat_id,
-            photo=open(f'{STATIC_DIR}/eggs_cow.jpg', 'rb'),
-            caption=f'@{username} сосёт бычьи яйца, потому что flood'
+        await context.bot.send_message(
+            chat_id=chat_id,
+            text=f'@{username}, ты наказан за флуд. Подумай над своим поведением! (10 сек)'
         )
+        await context.bot.ban_chat_member(chat_id, user_id)
+        time.sleep(10)
+        await context.bot.unban_chat_member(chat_id, user_id)
     else:
         while user_dict[username]:
             if user_dict[username][0] <= current_time - 20:
