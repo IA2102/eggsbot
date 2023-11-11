@@ -1,3 +1,4 @@
+from handlers.birthday import BIRTHDAY_HANDLER
 from handlers.call_all import CALL_ALL_HANDLER
 from handlers.eggs import EGGS_HANDLER
 from handlers.find_flood import FIND_FLOOD_HANDLER
@@ -9,5 +10,6 @@ __all__ = [
     'FIND_FLOOD_HANDLER',
     'VENT_HANDLER',
     'CALL_ALL_HANDLER',
-    'SLAP_HANDLER'
+    'SLAP_HANDLER',
+    'BIRTHDAY_HANDLER'
 ]

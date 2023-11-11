@@ -10,5 +10,6 @@ app.add_handler(FIND_FLOOD_HANDLER, group=1)
 app.add_handler(CALL_ALL_HANDLER, group=2)
 app.add_handler(VENT_HANDLER, group=3)
 app.add_handler(SLAP_HANDLER, group=4)
+app.add_handler(BIRTHDAY_HANDLER, group=5)
 
 app.run_polling()

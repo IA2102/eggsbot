@@ -1,8 +1,7 @@
 from telegram import Update
 from telegram.ext import ContextTypes, CommandHandler, filters
 
-user_ids = ['DanilaY13', 'vitalicaraivanov', 'Diacon_Anastasia', 'toadski', 'npowell931', 'tdktxjrxhrx', 'bigboug',
-            'ericad02', 'BA_RS_01', 'memejunky', 'beautifulmorning', 'eriomenco_nik']
+from db.db import user_ids
 
 
 async def call_all(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
