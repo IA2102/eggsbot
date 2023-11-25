@@ -10,13 +10,16 @@ user_dict = defaultdict(lambda: deque(maxlen=11))
 
 
 async def find_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if update.message.forward_date is None:
+        return
+
     chat_id = update.effective_chat.id
     user_id = update.effective_user.id
     username = update.effective_user.username
     current_time = time.time()
     logger.info("user_id = %d, username = %s", user_id, username)
 
-    if len(user_dict[username]) >= 9 and user_dict[username][0] >= current_time - 20:
+    if len(user_dict[username]) >= 9 and user_dict[username][0] >= current_time - 15:
         user_dict[username].clear()
         await context.bot.send_message(
             chat_id=chat_id,
@@ -31,7 +34,7 @@ async def find_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         await context.bot.send_message(user_id, telegram_link.invite_link)
     else:
         while user_dict[username]:
-            if user_dict[username][0] <= current_time - 20:
+            if user_dict[username][0] <= current_time - 15:
                 user_dict[username].popleft()
             else:
                 break
