@@ -1,7 +1,7 @@
 chat_id = -1001664864034
 # chat_id = -1002133576206
 
-user_ids = ['DanilaY13', 'vitalicaraivanov', 'Diacon_Anastasia', 'toadski', 'npowell931', 'tdktxjrxhrx', 'bigboug',
+user_ids = ['Danilaascov', 'vitalicaraivanov', 'Diacon_Anastasia', 'toadski', 'npowell931', 'tdktxjrxhrx', 'bigboug',
             'ericad02', 'BA_RS_01', 'memejunky', 'beautifulmorning', 'eriomenco_nik']
 
 birthdays = {
