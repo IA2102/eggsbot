@@ -1,27 +1,31 @@
+import glob
 import re
-import random
 
-from telegram import Update, ChatMember
+from telegram import Update
 from telegram.ext import MessageHandler, ContextTypes, filters
 
-from settings import STATIC_DIR
-from utils.logger import STDOUT_LOGGER as logger
-
+from settings import STATIC_DIR, VENT_DIR
 
 VENT_PATTERN = ".*([дД][уУ][шШ][нН][иИоО]).*"
 MENTION_PATTERN = r'@(\w+)'
+
+counter = 1
 
 
 async def vent(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_message = update.message.text
 
     if re.match(VENT_PATTERN, user_message) is not None:
-        vent_number = random.randint(1, 4)
+        file_list = glob.glob(STATIC_DIR + '/*')
+        global counter
+        counter = counter + 1 if counter <= len(file_list) else 1
+        vent_number = counter
         user_names = re.findall(MENTION_PATTERN, user_message)
 
         for chat_member in user_names:
             await context.bot.send_message(update.effective_chat.id, f'@{chat_member} не душни')
 
-        await context.bot.send_photo(update.effective_chat.id, photo=open(f'{STATIC_DIR}/vent_{vent_number}.jpg', 'rb'))
+        await context.bot.send_photo(update.effective_chat.id, photo=open(f'{VENT_DIR}/vent_{vent_number}.jpg', 'rb'))
+
 
 VENT_HANDLER = MessageHandler(filters.TEXT, vent)
