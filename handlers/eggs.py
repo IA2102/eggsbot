@@ -18,7 +18,7 @@ async def eggs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if re.match(EGGS_PATTERN, user_message) is not None:
         file_list = glob.glob(EGGS_DIR + '/*')
         global counter
-        counter = counter + 1 if counter <= len(file_list) else 1
+        counter = counter + 1 if counter < len(file_list) else 1
         is_moshonka = random.randint(1, 100) <= 15
         egg_number = 0 if is_moshonka else counter
 
