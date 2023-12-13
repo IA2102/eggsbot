@@ -18,7 +18,7 @@ async def vent(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if re.match(VENT_PATTERN, user_message) is not None:
         file_list = glob.glob(VENT_DIR + '/*')
         global counter
-        counter = counter + 1 if counter <= len(file_list) else 1
+        counter = counter + 1 if counter < len(file_list) else 1
         vent_number = counter
         user_names = re.findall(MENTION_PATTERN, user_message)
 
