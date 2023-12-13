@@ -29,15 +29,15 @@ async def check_birthday(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     job = context.chat_data.get('polling_job')
 
     if job:
-        await update.message.reply_text('A polling job is already running!')
+        await context.bot.send_message(chat_id=update.effective_chat.id, text='A polling job is already running!')
     else:
         job = context.job_queue.run_daily(
             happy_birthday,
-            time=datetime.time(hour=8, minute=0, tzinfo=pytz.timezone('Europe/Chisinau'))
+            time=datetime.time(hour=0, minute=0, tzinfo=pytz.timezone('Europe/Chisinau'))
         )
-
         context.chat_data['polling_job'] = job
+        await context.bot.send_message(chat_id=update.effective_chat.id, text='Happy birthday is activated')
 
 
-BIRTHDAY_HANDLER = CommandHandler('startcheck', check_birthday, filters.COMMAND)
+BIRTHDAY_HANDLER = CommandHandler('checkbirthday', check_birthday, filters.COMMAND)
 

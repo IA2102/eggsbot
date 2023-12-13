@@ -6,7 +6,7 @@ from telegram.ext import ContextTypes, MessageHandler, filters
 
 from utils.logger import STDOUT_LOGGER as logger
 
-user_dict = defaultdict(lambda: deque(maxlen=11))
+user_dict = defaultdict(lambda: deque(maxlen=15))
 
 
 async def find_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -19,7 +19,7 @@ async def find_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     current_time = time.time()
     logger.info("user_id = %d, username = %s", user_id, username)
 
-    if len(user_dict[username]) >= 9 and user_dict[username][0] >= current_time - 15:
+    if len(user_dict[username]) >= 12 and user_dict[username][0] >= current_time - 15:
         user_dict[username].clear()
         await context.bot.send_message(
             chat_id=chat_id,
